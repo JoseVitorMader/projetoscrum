@@ -28,6 +28,8 @@ function Board({ team, onBack }) {
   useEffect(() => {
     if (!team) return;
 
+    console.log('📊 Carregando board para team:', team.id, 'User:', currentUser?.uid);
+
     // Listen to lists
     const listsQuery = query(
       collection(db, 'lists'),
@@ -35,13 +37,21 @@ function Board({ team, onBack }) {
       orderBy('order')
     );
 
-    const unsubscribeLists = onSnapshot(listsQuery, (snapshot) => {
-      const listsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setLists(listsData);
-    });
+    const unsubscribeLists = onSnapshot(
+      listsQuery, 
+      (snapshot) => {
+        console.log('✅ Lists carregadas:', snapshot.docs.length);
+        const listsData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setLists(listsData);
+      },
+      (error) => {
+        console.error('❌ Erro ao carregar lists:', error);
+        alert('Erro ao carregar colunas: ' + error.message);
+      }
+    );
 
     // Listen to cards
     const cardsQuery = query(
@@ -49,29 +59,39 @@ function Board({ team, onBack }) {
       where('teamId', '==', team.id)
     );
 
-    const unsubscribeCards = onSnapshot(cardsQuery, (snapshot) => {
-      const cardsData = {};
-      snapshot.docs.forEach(doc => {
-        const card = { id: doc.id, ...doc.data() };
-        if (!cardsData[card.listId]) {
-          cardsData[card.listId] = [];
-        }
-        cardsData[card.listId].push(card);
-      });
+    const unsubscribeCards = onSnapshot(
+      cardsQuery, 
+      (snapshot) => {
+        console.log('✅ Cards carregados:', snapshot.docs.length);
+        const cardsData = {};
+        snapshot.docs.forEach(doc => {
+          const card = { id: doc.id, ...doc.data() };
+          console.log('  Card:', card.title, 'ListId:', card.listId);
+          if (!cardsData[card.listId]) {
+            cardsData[card.listId] = [];
+          }
+          cardsData[card.listId].push(card);
+        });
 
-      // Sort cards by order
-      Object.keys(cardsData).forEach(listId => {
-        cardsData[listId].sort((a, b) => a.order - b.order);
-      });
+        // Sort cards by order
+        Object.keys(cardsData).forEach(listId => {
+          cardsData[listId].sort((a, b) => a.order - b.order);
+        });
 
-      setCards(cardsData);
-    });
+        console.log('📦 Cards organizados:', cardsData);
+        setCards(cardsData);
+      },
+      (error) => {
+        console.error('❌ Erro ao carregar cards:', error);
+        alert('Erro ao carregar cards: ' + error.message + '\n\nVerifique as regras do Firestore!');
+      }
+    );
 
     return () => {
       unsubscribeLists();
       unsubscribeCards();
     };
-  }, [team]);
+  }, [team, currentUser]);
 
   function openCardModal(list, card = null) {
     setSelectedList(list);
