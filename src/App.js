@@ -1,24 +1,36 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Login from './components/Auth/Login';
+import Signup from './components/Auth/Signup';
+import Dashboard from './components/Dashboard/Dashboard';
+import Board from './components/Board/Board';
 import './App.css';
+
+function AppContent() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const { currentUser } = useAuth();
+
+  if (!currentUser) {
+    return isLogin ? (
+      <Login onToggleMode={() => setIsLogin(false)} />
+    ) : (
+      <Signup onToggleMode={() => setIsLogin(true)} />
+    );
+  }
+
+  if (selectedTeam) {
+    return <Board team={selectedTeam} onBack={() => setSelectedTeam(null)} />;
+  }
+
+  return <Dashboard onSelectTeam={setSelectedTeam} />;
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

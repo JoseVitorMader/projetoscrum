@@ -1,0 +1,296 @@
+import React, { useState, useEffect } from 'react';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { 
+  collection, 
+  query, 
+  where, 
+  onSnapshot, 
+  addDoc, 
+  updateDoc, 
+  deleteDoc, 
+  doc,
+  orderBy 
+} from 'firebase/firestore';
+import { db } from '../../firebase';
+import { useAuth } from '../../contexts/AuthContext';
+import Card from '../Card/Card';
+import './Board.css';
+
+function Board({ team, onBack }) {
+  const [lists, setLists] = useState([]);
+  const [cards, setCards] = useState({});
+  const [showCardModal, setShowCardModal] = useState(false);
+  const [selectedList, setSelectedList] = useState(null);
+  const [newCard, setNewCard] = useState({ title: '', description: '' });
+  const [editingCard, setEditingCard] = useState(null);
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    if (!team) return;
+
+    // Listen to lists
+    const listsQuery = query(
+      collection(db, 'lists'),
+      where('teamId', '==', team.id),
+      orderBy('order')
+    );
+
+    const unsubscribeLists = onSnapshot(listsQuery, (snapshot) => {
+      const listsData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setLists(listsData);
+    });
+
+    // Listen to cards
+    const cardsQuery = query(
+      collection(db, 'cards'),
+      where('teamId', '==', team.id)
+    );
+
+    const unsubscribeCards = onSnapshot(cardsQuery, (snapshot) => {
+      const cardsData = {};
+      snapshot.docs.forEach(doc => {
+        const card = { id: doc.id, ...doc.data() };
+        if (!cardsData[card.listId]) {
+          cardsData[card.listId] = [];
+        }
+        cardsData[card.listId].push(card);
+      });
+
+      // Sort cards by order
+      Object.keys(cardsData).forEach(listId => {
+        cardsData[listId].sort((a, b) => a.order - b.order);
+      });
+
+      setCards(cardsData);
+    });
+
+    return () => {
+      unsubscribeLists();
+      unsubscribeCards();
+    };
+  }, [team]);
+
+  function openCardModal(list, card = null) {
+    setSelectedList(list);
+    if (card) {
+      setEditingCard(card);
+      setNewCard({ title: card.title, description: card.description || '' });
+    } else {
+      setEditingCard(null);
+      setNewCard({ title: '', description: '' });
+    }
+    setShowCardModal(true);
+  }
+
+  function closeCardModal() {
+    setShowCardModal(false);
+    setSelectedList(null);
+    setEditingCard(null);
+    setNewCard({ title: '', description: '' });
+  }
+
+  async function handleSaveCard(e) {
+    e.preventDefault();
+
+    try {
+      if (editingCard) {
+        // Update existing card
+        const cardRef = doc(db, 'cards', editingCard.id);
+        await updateDoc(cardRef, {
+          title: newCard.title,
+          description: newCard.description,
+          updatedAt: new Date().toISOString()
+        });
+      } else {
+        // Create new card
+        const listCards = cards[selectedList.id] || [];
+        await addDoc(collection(db, 'cards'), {
+          teamId: team.id,
+          listId: selectedList.id,
+          title: newCard.title,
+          description: newCard.description,
+          order: listCards.length,
+          createdBy: currentUser.uid,
+          createdByName: currentUser.displayName || currentUser.email,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      closeCardModal();
+    } catch (error) {
+      alert('Erro ao salvar card: ' + error.message);
+    }
+  }
+
+  async function handleDeleteCard(cardId) {
+    if (!window.confirm('Deseja realmente excluir este card?')) return;
+
+    try {
+      await deleteDoc(doc(db, 'cards', cardId));
+    } catch (error) {
+      alert('Erro ao excluir card: ' + error.message);
+    }
+  }
+
+  async function onDragEnd(result) {
+    const { source, destination, draggableId } = result;
+
+    if (!destination) return;
+
+    if (
+      source.listId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+
+    const sourceListId = source.droppableId;
+    const destListId = destination.droppableId;
+
+    // Update card position
+    const cardRef = doc(db, 'cards', draggableId);
+    
+    try {
+      await updateDoc(cardRef, {
+        listId: destListId,
+        order: destination.index,
+        updatedAt: new Date().toISOString()
+      });
+
+      // Reorder other cards
+      const destCards = cards[destListId] || [];
+      const promises = [];
+
+      if (sourceListId === destListId) {
+        // Same list - reorder
+        const newCards = Array.from(destCards);
+        const [removed] = newCards.splice(source.index, 1);
+        newCards.splice(destination.index, 0, removed);
+
+        newCards.forEach((card, index) => {
+          if (card.order !== index) {
+            promises.push(
+              updateDoc(doc(db, 'cards', card.id), { order: index })
+            );
+          }
+        });
+      } else {
+        // Different lists
+        destCards.forEach((card, index) => {
+          if (index >= destination.index && card.id !== draggableId) {
+            promises.push(
+              updateDoc(doc(db, 'cards', card.id), { order: index + 1 })
+            );
+          }
+        });
+      }
+
+      await Promise.all(promises);
+    } catch (error) {
+      console.error('Erro ao mover card:', error);
+    }
+  }
+
+  return (
+    <div className="board">
+      <div className="board-header">
+        <button onClick={onBack} className="btn-back">← Voltar</button>
+        <h1>📋 {team.name}</h1>
+        <div className="board-info">
+          <span>👥 {team.members.length} membros</span>
+        </div>
+      </div>
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="board-lists">
+          {lists.map(list => (
+            <div key={list.id} className="list">
+              <div className="list-header">
+                <h3>{list.name}</h3>
+                <span className="card-count">{(cards[list.id] || []).length}</span>
+              </div>
+
+              <Droppable droppableId={list.id}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className={`list-cards ${snapshot.isDraggingOver ? 'dragging-over' : ''}`}
+                  >
+                    {(cards[list.id] || []).map((card, index) => (
+                      <Draggable key={card.id} draggableId={card.id} index={index}>
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className={`card-wrapper ${snapshot.isDragging ? 'dragging' : ''}`}
+                          >
+                            <Card
+                              card={card}
+                              onEdit={() => openCardModal(list, card)}
+                              onDelete={() => handleDeleteCard(card.id)}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+
+              <button onClick={() => openCardModal(list)} className="add-card-btn">
+                ➕ Adicionar Card
+              </button>
+            </div>
+          ))}
+        </div>
+      </DragDropContext>
+
+      {showCardModal && (
+        <div className="modal-overlay" onClick={closeCardModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>{editingCard ? 'Editar Card' : 'Novo Card'}</h2>
+            <p className="modal-list-name">Lista: <strong>{selectedList?.name}</strong></p>
+            <form onSubmit={handleSaveCard}>
+              <div className="form-group">
+                <label>Título *</label>
+                <input
+                  type="text"
+                  value={newCard.title}
+                  onChange={(e) => setNewCard({ ...newCard, title: e.target.value })}
+                  placeholder="Ex: Implementar login"
+                  required
+                  autoFocus
+                />
+              </div>
+              <div className="form-group">
+                <label>Descrição</label>
+                <textarea
+                  value={newCard.description}
+                  onChange={(e) => setNewCard({ ...newCard, description: e.target.value })}
+                  placeholder="Detalhes da tarefa..."
+                  rows="4"
+                />
+              </div>
+              <div className="modal-actions">
+                <button type="button" onClick={closeCardModal} className="btn-secondary">
+                  Cancelar
+                </button>
+                <button type="submit" className="btn-primary">
+                  {editingCard ? 'Salvar' : 'Criar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Board;

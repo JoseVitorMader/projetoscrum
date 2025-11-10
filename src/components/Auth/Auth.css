@@ -1,0 +1,120 @@
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fffaf0 0%, #fff8e7 50%, #ffefd5 100%);
+  padding: 20px;
+}
+
+.auth-card {
+  background: white;
+  padding: 50px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid rgba(255, 140, 66, 0.1);
+}
+
+.auth-card h2 {
+  margin-bottom: 35px;
+  color: #2c2c2c;
+  text-align: center;
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #4a4a4a;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #f5f0e8;
+  border-radius: 10px;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: all 0.3s;
+  background: #fafaf8;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #ff8c42;
+  box-shadow: 0 0 0 4px rgba(255, 140, 66, 0.08);
+  background: white;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #ff8c42 0%, #ff7028 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 6px 20px rgba(255, 140, 66, 0.25);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #ff7a2e 0%, #ff5f1a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 140, 66, 0.35);
+}
+
+.btn-primary:disabled {
+  background: #e0e0e0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.error-message {
+  background: #fff5f5;
+  color: #e53e3e;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  border-left: 4px solid #e53e3e;
+  font-weight: 500;
+}
+
+.toggle-mode {
+  text-align: center;
+  margin-top: 24px;
+  color: #6a6a6a;
+  font-size: 14px;
+}
+
+.toggle-mode button {
+  background: none;
+  border: none;
+  color: #ff8c42;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+
+.toggle-mode button:hover {
+  color: #ff6b35;
+}

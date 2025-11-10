@@ -1,70 +1,243 @@
-# Getting Started with Create React App
+# 📋 Projeto Scrum Board
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Plataforma web colaborativa para gerenciamento ágil de projetos, inspirada no Trello, desenvolvida com React e Firebase.
 
-## Available Scripts
+## 🎯 Sobre o Projeto
 
-In the project directory, you can run:
+Este projeto foi desenvolvido como parte da disciplina de Computação em Nuvem, aplicando os princípios e papéis do framework SCRUM no desenvolvimento de uma aplicação real. A plataforma permite que equipes organizem, priorizem e acompanhem tarefas de forma colaborativa e transparente.
 
-### `npm start`
+## ✨ Funcionalidades
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🔐 Autenticação
+- Login e cadastro com email/senha (Firebase Authentication)
+- Persistência de sessão automática
+- Proteção de rotas
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 👥 Sistema de Equipes
+- Criar múltiplas equipes de trabalho
+- Convidar membros por email
+- Visualizar membros da equipe
+- Isolamento de dados por equipe
 
-### `npm test`
+### 📊 Board Scrum
+- 4 colunas padrão: **Backlog**, **To Do**, **Doing**, **Done**
+- Criar, editar e excluir cards (tarefas)
+- Arrastar e soltar cards entre colunas (Drag & Drop)
+- Cada card contém:
+  - Título
+  - Descrição
+  - Responsável (autor)
+  - Data de criação
+- Sincronização em tempo real entre usuários
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Tecnologias Utilizadas
 
-### `npm run build`
+- **React 19** - Biblioteca para construção da interface
+- **Firebase** - Backend as a Service
+  - Authentication (autenticação)
+  - Firestore (banco de dados NoSQL em tempo real)
+  - Analytics
+- **@hello-pangea/dnd** - Biblioteca para drag-and-drop
+- **CSS3** - Estilização customizada
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📦 Instalação e Execução
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Pré-requisitos
+- Node.js (versão 14 ou superior)
+- npm ou yarn
+- Conta no Firebase (já configurada no projeto)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Passo a Passo
 
-### `npm run eject`
+1. **Clone o repositório ou baixe os arquivos**
+   ```bash
+   cd "c:\Users\mader\OneDrive\Documentos\Computação em Nuvem\projetoscrum"
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. **Instale as dependências**
+   ```bash
+   npm install
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **Execute o projeto em modo desenvolvimento**
+   ```bash
+   npm start
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. **Acesse no navegador**
+   
+   Abra [http://localhost:3000](http://localhost:3000)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Build para Produção
 
-## Learn More
+Para criar uma versão otimizada para produção:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm run build
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🧪 Testes
 
-### Code Splitting
+Execute os testes automatizados:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+npm test
+```
 
-### Analyzing the Bundle Size
+## 🎭 Papéis SCRUM no Projeto
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Product Owner (PO)
+**Responsabilidades:**
+- Definir e priorizar o backlog do produto
+- Garantir que a equipe entenda os requisitos
+- Validar entregas e aceitar funcionalidades
+- Representar os stakeholders
 
-### Making a Progressive Web App
+**Funcionalidades relacionadas:**
+- Criar e priorizar cards no backlog
+- Mover cards entre as colunas conforme prioridade
+- Revisar cards na coluna "Done"
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Scrum Master (SM)
+**Responsabilidades:**
+- Facilitar cerimônias ágeis (Daily, Planning, Review, Retrospective)
+- Remover impedimentos da equipe
+- Garantir que o processo SCRUM seja seguido
+- Promover melhoria contínua
 
-### Advanced Configuration
+**Funcionalidades relacionadas:**
+- Visualizar o board completo para identificar gargalos
+- Gerenciar membros da equipe
+- Facilitar a organização dos cards
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Equipe de Desenvolvimento (Dev Team)
+**Responsabilidades:**
+- Implementar as funcionalidades priorizadas
+- Estimar esforço das tarefas
+- Auto-organização e colaboração
+- Entregar incrementos funcionais
 
-### Deployment
+**Funcionalidades relacionadas:**
+- Criar e editar cards
+- Mover cards de "To Do" → "Doing" → "Done"
+- Adicionar descrições detalhadas nas tarefas
+- Visualizar tarefas atribuídas
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📱 Estrutura do Projeto
 
-### `npm run build` fails to minify
+```
+src/
+├── components/
+│   ├── Auth/           # Login e Signup
+│   ├── Board/          # Board principal com listas
+│   ├── Card/           # Componente de card
+│   └── Dashboard/      # Dashboard de equipes
+├── contexts/
+│   └── AuthContext.js  # Contexto de autenticação
+├── firebase.js         # Configuração do Firebase
+├── App.js              # Componente principal
+└── index.js            # Ponto de entrada
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 🔥 Estrutura do Firestore
+
+### Coleções:
+
+**users/**
+- `uid` (string) - ID do usuário
+- `email` (string)
+- `displayName` (string)
+- `createdAt` (timestamp)
+- `teams` (array) - IDs das equipes
+
+**teams/**
+- `name` (string)
+- `createdBy` (string) - UID do criador
+- `members` (array) - UIDs dos membros
+- `memberEmails` (array)
+- `createdAt` (timestamp)
+
+**lists/**
+- `teamId` (string)
+- `name` (string) - Ex: "Backlog", "To Do", "Doing", "Done"
+- `order` (number)
+- `createdAt` (timestamp)
+
+**cards/**
+- `teamId` (string)
+- `listId` (string)
+- `title` (string)
+- `description` (string)
+- `order` (number)
+- `createdBy` (string)
+- `createdByName` (string)
+- `createdAt` (timestamp)
+
+## 🎨 Princípios Ágeis Aplicados
+
+1. **Colaboração** - Sistema de equipes e sincronização em tempo real
+2. **Transparência** - Board visível para todos os membros
+3. **Adaptação** - Cards podem ser movidos e priorizados facilmente
+4. **Entregas Contínuas** - Drag & drop permite visualizar o fluxo de trabalho
+5. **Auto-organização** - Equipe gerencia suas próprias tarefas
+
+## 📝 Como Usar
+
+### 1. Primeiro Acesso
+- Cadastre-se com email e senha
+- Faça login na plataforma
+
+### 2. Criar uma Equipe
+- Clique em "➕ Criar Nova Equipe"
+- Dê um nome para sua equipe
+- A equipe será criada com 4 colunas padrão
+
+### 3. Convidar Membros
+- Na dashboard, clique em "Convidar" no card da equipe
+- Digite o email do membro (ele precisa estar cadastrado)
+- O membro terá acesso ao board da equipe
+
+### 4. Gerenciar Tarefas
+- Abra o board da equipe
+- Clique em "➕ Adicionar Card" em qualquer coluna
+- Preencha título e descrição
+- Arraste os cards entre as colunas conforme o progresso
+
+### 5. Fluxo de Trabalho Sugerido
+- **Backlog**: Todas as ideias e tarefas futuras
+- **To Do**: Tarefas priorizadas para a sprint atual
+- **Doing**: Tarefas em desenvolvimento
+- **Done**: Tarefas concluídas
+
+## 🐛 Troubleshooting
+
+### Erro de autenticação
+Certifique-se de que o Firebase Authentication está habilitado no console:
+- Acesse [console.firebase.google.com](https://console.firebase.google.com)
+- Vá em "Authentication" → "Sign-in method"
+- Habilite "Email/Password"
+
+### Erro no Firestore
+Verifique as regras do Firestore:
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
+
+## 📄 Licença
+
+Este projeto foi desenvolvido para fins educacionais.
+
+## 👥 Equipe
+
+Desenvolvido para a disciplina de **Computação em Nuvem** - Atividade Scrum em Dupla
+
+---
+
+**🚀 Bom trabalho ágil!**
