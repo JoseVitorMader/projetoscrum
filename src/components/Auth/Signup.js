@@ -35,7 +35,7 @@ function Signup({ onToggleMode }) {
         <div className="auth-mascot">
           <img src="/mascot.png" alt="Mascote Scrum" />
         </div>
-        <h2>Cadastro - Scrum Board</h2>
+        <h2>Cadastro - Mister SCRUM</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">

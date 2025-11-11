@@ -29,7 +29,7 @@ function Login({ onToggleMode }) {
         <div className="auth-mascot">
           <img src="/mascot.png" alt="Mascote Scrum" />
         </div>
-        <h2>Login - Scrum Board</h2>
+        <h2>Login - Mister SCRUM</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
