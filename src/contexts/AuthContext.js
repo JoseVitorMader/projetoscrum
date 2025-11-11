@@ -43,6 +43,13 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
+  function updateUserProfile(newProfile) {
+    setUserProfile(prev => ({
+      ...prev,
+      ...newProfile
+    }));
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
@@ -68,7 +75,8 @@ export function AuthProvider({ children }) {
     userProfile,
     signup,
     login,
-    logout
+    logout,
+    updateUserProfile
   };
 
   return (

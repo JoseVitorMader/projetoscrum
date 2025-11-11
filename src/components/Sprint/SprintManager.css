@@ -1,0 +1,374 @@
+.sprint-manager {
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.sprint-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #ffefd5;
+}
+
+.sprint-header h2 {
+  margin: 0;
+  color: #2c2c2c;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.btn-create-sprint {
+  background: linear-gradient(135deg, #ff8c42, #ff7028);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+}
+
+.btn-create-sprint:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 140, 66, 0.4);
+}
+
+.active-sprint {
+  background: linear-gradient(135deg, #fff8f0 0%, #ffefd5 100%);
+  border: 3px solid #ff8c42;
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 30px;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(255, 140, 66, 0.15);
+}
+
+.active-sprint h3 {
+  margin: 10px 0;
+  color: #2c2c2c;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.sprint-goal {
+  color: #4a4a4a;
+  font-size: 16px;
+  margin: 10px 0;
+  font-weight: 500;
+}
+
+.sprint-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.sprint-badge.active {
+  background: linear-gradient(135deg, #ff8c42, #ff7028);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+}
+
+.sprint-badge.completed {
+  background: #48bb78;
+  color: white;
+}
+
+.sprint-badge.planned {
+  background: #e0e0e0;
+  color: #666;
+}
+
+.sprint-dates {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: #666;
+  font-size: 14px;
+  margin: 15px 0;
+  font-weight: 600;
+}
+
+.sprint-progress {
+  margin: 20px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid #ffefd5;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff8c42, #ff7028);
+  transition: width 0.5s ease;
+  border-radius: 20px;
+}
+
+.days-remaining {
+  text-align: center;
+  margin: 10px 0;
+  color: #2c2c2c;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.btn-complete-sprint {
+  width: 100%;
+  background: #48bb78;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+}
+
+.btn-complete-sprint:hover {
+  background: #38a169;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(72, 187, 120, 0.4);
+}
+
+.sprints-list {
+  margin-top: 30px;
+}
+
+.sprints-list h3 {
+  color: #2c2c2c;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.empty-message {
+  text-align: center;
+  color: #999;
+  padding: 40px;
+  font-size: 16px;
+}
+
+.sprint-item {
+  background: #fffaf0;
+  border: 2px solid #ffefd5;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: all 0.3s;
+}
+
+.sprint-item:hover {
+  border-color: #ff8c42;
+  transform: translateX(5px);
+}
+
+.sprint-item.active {
+  border-color: #ff8c42;
+  background: linear-gradient(135deg, #fff8f0 0%, #ffefd5 100%);
+}
+
+.sprint-item.completed {
+  opacity: 0.7;
+}
+
+.sprint-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.sprint-item h4 {
+  margin: 0;
+  color: #2c2c2c;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sprint-item p {
+  color: #666;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.sprint-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #ffefd5;
+}
+
+.btn-start {
+  background: linear-gradient(135deg, #ff8c42, #ff7028);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 13px;
+}
+
+.btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+}
+
+.btn-delete {
+  background: #fff5f5;
+  color: #e53e3e;
+  border: 2px solid #e53e3e;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 13px;
+}
+
+.btn-delete:hover {
+  background: #e53e3e;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #2c2c2c;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  color: #2c2c2c;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ffefd5;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #fffaf0;
+  transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #ff8c42;
+  background: white;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff8c42, #ff7028);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
+}
+
+.btn-secondary {
+  background: white;
+  color: #666;
+  border: 2px solid #e0e0e0;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+}
+
+.btn-secondary:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .sprint-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+}

@@ -13,13 +13,20 @@ import {
 import { db } from '../../firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import Card from '../Card/Card';
+import CardModal from '../Card/CardModal';
+import SprintManager from '../Sprint/SprintManager';
+import ActivityLog from '../Activity/ActivityLog';
+import { logActivity } from '../../utils/activityLogger';
 import './Board.css';
 
 function Board({ team, onBack }) {
   const [lists, setLists] = useState([]);
   const [cards, setCards] = useState({});
   const [showCardModal, setShowCardModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showSprintManager, setShowSprintManager] = useState(false);
   const [selectedList, setSelectedList] = useState(null);
+  const [selectedCard, setSelectedCard] = useState(null);
   const [newCard, setNewCard] = useState({ title: '', description: '' });
   const [editingCard, setEditingCard] = useState(null);
   const { currentUser } = useAuth();
@@ -124,6 +131,13 @@ function Board({ team, onBack }) {
           description: newCard.description,
           updatedAt: new Date().toISOString()
         });
+        
+        await logActivity(
+          team.id,
+          'card_updated',
+          `${currentUser.displayName || currentUser.email} atualizou o card "${newCard.title}"`,
+          currentUser.uid
+        );
       } else {
         // Create new card
         const listCards = cards[selectedList.id] || [];
@@ -137,6 +151,13 @@ function Board({ team, onBack }) {
           createdByName: currentUser.displayName || currentUser.email,
           createdAt: new Date().toISOString()
         });
+        
+        await logActivity(
+          team.id,
+          'card_created',
+          `${currentUser.displayName || currentUser.email} criou o card "${newCard.title}" em ${selectedList.name}`,
+          currentUser.uid
+        );
       }
 
       closeCardModal();
@@ -149,7 +170,17 @@ function Board({ team, onBack }) {
     if (!window.confirm('Deseja realmente excluir este card?')) return;
 
     try {
+      const cardToDelete = Object.values(cards).flat().find(c => c.id === cardId);
       await deleteDoc(doc(db, 'cards', cardId));
+      
+      if (cardToDelete) {
+        await logActivity(
+          team.id,
+          'card_deleted',
+          `${currentUser.displayName || currentUser.email} excluiu o card "${cardToDelete.title}"`,
+          currentUser.uid
+        );
+      }
     } catch (error) {
       alert('Erro ao excluir card: ' + error.message);
     }
@@ -220,9 +251,14 @@ function Board({ team, onBack }) {
         <button onClick={onBack} className="btn-back">← Voltar</button>
         <h1>📋 {team.name}</h1>
         <div className="board-info">
+          <button onClick={() => setShowSprintManager(!showSprintManager)} className="btn-sprint">
+            🏃 {showSprintManager ? 'Ocultar' : 'Gerenciar'} Sprints
+          </button>
           <span>👥 {team.members.length} membros</span>
         </div>
       </div>
+
+      {showSprintManager && <SprintManager team={team} />}
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="board-lists">
@@ -253,6 +289,10 @@ function Board({ team, onBack }) {
                               card={card}
                               onEdit={() => openCardModal(list, card)}
                               onDelete={() => handleDeleteCard(card.id)}
+                              onClick={() => {
+                                setSelectedCard(card);
+                                setShowDetailModal(true);
+                              }}
                             />
                           </div>
                         )}
@@ -309,6 +349,28 @@ function Board({ team, onBack }) {
           </div>
         </div>
       )}
+
+      {showDetailModal && selectedCard && (
+        <CardModal
+          card={selectedCard}
+          onClose={() => {
+            setShowDetailModal(false);
+            setSelectedCard(null);
+          }}
+          onUpdate={(updatedCard) => {
+            // Atualizar o card no estado local
+            const listId = selectedCard.listId;
+            setCards(prev => ({
+              ...prev,
+              [listId]: prev[listId].map(c => 
+                c.id === updatedCard.id ? updatedCard : c
+              )
+            }));
+          }}
+        />
+      )}
+
+      <ActivityLog teamId={team.id} />
     </div>
   );
 }

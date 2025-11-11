@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import './Dashboard.css';
 
-function Dashboard({ onSelectTeam }) {
+function Dashboard({ onSelectTeam, onShowProfile }) {
   const [teams, setTeams] = useState([]);
+  const [teamMembers, setTeamMembers] = useState({});
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showMembersModal, setShowMembersModal] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [teamName, setTeamName] = useState('');
   const [inviteEmail, setInviteEmail] = useState('');
@@ -34,8 +36,34 @@ function Dashboard({ onSelectTeam }) {
         ...doc.data()
       }));
       setTeams(teamsData);
+      
+      // Load member details for each team
+      for (const team of teamsData) {
+        await loadTeamMembers(team.id, team.members);
+      }
     } catch (error) {
       console.error('Erro ao carregar equipes:', error);
+    }
+  }
+
+  async function loadTeamMembers(teamId, memberIds) {
+    try {
+      const membersData = [];
+      for (const memberId of memberIds) {
+        const userDoc = await getDoc(doc(db, 'users', memberId));
+        if (userDoc.exists()) {
+          membersData.push({
+            id: memberId,
+            ...userDoc.data()
+          });
+        }
+      }
+      setTeamMembers(prev => ({
+        ...prev,
+        [teamId]: membersData
+      }));
+    } catch (error) {
+      console.error('Erro ao carregar membros:', error);
     }
   }
 
@@ -131,6 +159,11 @@ function Dashboard({ onSelectTeam }) {
     setShowInviteModal(true);
   }
 
+  function openMembersModal(team) {
+    setSelectedTeam(team);
+    setShowMembersModal(true);
+  }
+
   function openEditModal(team) {
     setSelectedTeam(team);
     setTeamName(team.name);
@@ -208,10 +241,13 @@ function Dashboard({ onSelectTeam }) {
       <div className="dashboard-header">
         <div className="dashboard-header-left">
           <img src="/mascot.png" alt="Mascote Scrum" className="dashboard-mascot" />
-          <h1> Minhas Equipes Scrum</h1>
+          <h1>Minhas Equipes Scrum</h1>
         </div>
         <div className="header-actions">
-          <span className="user-info">👤 {currentUser?.displayName || currentUser?.email}</span>
+          <button onClick={onShowProfile} className="btn-profile" title="Meu Perfil">
+            👤 Perfil
+          </button>
+          <span className="user-info">{currentUser?.displayName || currentUser?.email}</span>
           <button onClick={logout} className="btn-secondary">Sair</button>
         </div>
       </div>
@@ -228,9 +264,11 @@ function Dashboard({ onSelectTeam }) {
               <div key={team.id} className="team-card">
                 <div className="team-card-header">
                   <h3>{team.name}</h3>
-                  {isCreator && <span className="creator-badge">� Criador</span>}
+                  {isCreator && <span className="creator-badge">👑 Criador</span>}
                 </div>
-                <p>�👥 {team.members.length} membros</p>
+                <p className="team-members-count" onClick={() => openMembersModal(team)} style={{cursor: 'pointer'}}>
+                  � {team.members.length} membros
+                </p>
                 <div className="team-actions">
                   <button onClick={() => onSelectTeam(team)} className="btn-primary">
                     Abrir Board
@@ -352,6 +390,41 @@ function Dashboard({ onSelectTeam }) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showMembersModal && selectedTeam && (
+        <div className="modal-overlay" onClick={() => setShowMembersModal(false)}>
+          <div className="modal-content members-modal" onClick={(e) => e.stopPropagation()}>
+            <h2>Membros da Equipe</h2>
+            <p className="modal-info"><strong>{selectedTeam.name}</strong></p>
+            <div className="members-list">
+              {teamMembers[selectedTeam.id]?.map(member => (
+                <div key={member.id} className="member-item">
+                  <div className="member-avatar">
+                    {member.photoURL ? (
+                      <img src={member.photoURL} alt={member.displayName || member.email} />
+                    ) : (
+                      <div className="avatar-placeholder">
+                        {(member.displayName || member.email).charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                  <div className="member-info">
+                    <h4>{member.displayName || member.email}</h4>
+                    <p className="member-email">{member.email}</p>
+                    {member.role && <span className="role-badge">{member.role}</span>}
+                  </div>
+                  {member.id === selectedTeam.createdBy && (
+                    <span className="creator-indicator">👑</span>
+                  )}
+                </div>
+              ))}
+            </div>
+            <button onClick={() => setShowMembersModal(false)} className="btn-primary">
+              Fechar
+            </button>
           </div>
         </div>
       )}

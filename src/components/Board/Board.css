@@ -45,6 +45,30 @@
 }
 
 .board-info {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.btn-sprint {
+  background: linear-gradient(135deg, #ff8c42, #ff7028);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+}
+
+.btn-sprint:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 140, 66, 0.4);
+}
+
+.board-info span {
   color: #4a4a4a;
   font-weight: 600;
   background: #fff8f0;
