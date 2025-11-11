@@ -26,6 +26,9 @@ function Login({ onToggleMode }) {
   return (
     <div className="auth-container">
       <div className="auth-card">
+        <div className="auth-mascot">
+          <img src="/mascot.png" alt="Mascote Scrum" />
+        </div>
         <h2>Login - Scrum Board</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>

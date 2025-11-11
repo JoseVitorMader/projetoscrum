@@ -17,6 +17,27 @@
   border: 1px solid rgba(255, 140, 66, 0.1);
 }
 
+.auth-mascot {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.auth-mascot img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .auth-card h2 {
   margin-bottom: 35px;
   color: #2c2c2c;

@@ -206,7 +206,10 @@ function Dashboard({ onSelectTeam }) {
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1>🏢 Minhas Equipes Scrum</h1>
+        <div className="dashboard-header-left">
+          <img src="/mascot.png" alt="Mascote Scrum" className="dashboard-mascot" />
+          <h1> Minhas Equipes Scrum</h1>
+        </div>
         <div className="header-actions">
           <span className="user-info">👤 {currentUser?.displayName || currentUser?.email}</span>
           <button onClick={logout} className="btn-secondary">Sair</button>

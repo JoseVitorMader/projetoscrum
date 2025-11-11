@@ -16,6 +16,29 @@
   border-left: 6px solid #ff8c42;
 }
 
+.dashboard-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.dashboard-mascot {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 .dashboard-header h1 {
   margin: 0;
   color: #2c2c2c;
