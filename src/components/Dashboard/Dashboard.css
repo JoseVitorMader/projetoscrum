@@ -84,6 +84,7 @@
   border-top: 5px solid #ff8c42;
   border: 1px solid rgba(255, 140, 66, 0.1);
   border-top: 5px solid #ff8c42;
+  position: relative;
 }
 
 .team-card:hover {
@@ -92,12 +93,30 @@
   border-top-color: #ff7028;
 }
 
+.team-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
 .team-card h3 {
-  margin: 0 0 12px 0;
+  margin: 0;
   color: #2c2c2c;
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.3px;
+  flex: 1;
+}
+
+.creator-badge {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #2c2c2c;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
 }
 
 .team-card p {
@@ -110,6 +129,58 @@
 .team-actions {
   display: flex;
   gap: 10px;
+  margin-bottom: 12px;
+}
+
+.team-secondary-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #f5f5f5;
+  justify-content: flex-end;
+}
+
+.btn-edit,
+.btn-delete {
+  padding: 8px 12px;
+  background: #fafaf8;
+  border: 2px solid #e8e8e8;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.btn-edit:hover {
+  background: #fff8f0;
+  border-color: #ff8c42;
+  transform: scale(1.1);
+}
+
+.btn-delete:hover {
+  background: #fff5f5;
+  border-color: #e53e3e;
+  transform: scale(1.1);
+}
+
+.btn-leave {
+  padding: 8px 16px;
+  background: #fff5f5;
+  color: #e53e3e;
+  border: 2px solid #e53e3e;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+}
+
+.btn-leave:hover {
+  background: #e53e3e;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
 }
 
 .btn-invite {
@@ -167,7 +238,27 @@
 
 .modal-content h2 {
   margin-top: 0;
-  color: #333;
+  color: #2c2c2c;
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+}
+
+.modal-info {
+  color: #6a6a6a;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.modal-hint {
+  background: #fff8f0;
+  color: #ff8c42;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border-left: 4px solid #ff8c42;
+  font-weight: 500;
 }
 
 .modal-actions {

@@ -30,11 +30,10 @@ function Board({ team, onBack }) {
 
     console.log('📊 Carregando board para team:', team.id, 'User:', currentUser?.uid);
 
-    // Listen to lists
+    // Listen to lists (SEM orderBy para evitar erro de índice)
     const listsQuery = query(
       collection(db, 'lists'),
-      where('teamId', '==', team.id),
-      orderBy('order')
+      where('teamId', '==', team.id)
     );
 
     const unsubscribeLists = onSnapshot(
@@ -45,6 +44,8 @@ function Board({ team, onBack }) {
           id: doc.id,
           ...doc.data()
         }));
+        // Ordenar no código em vez de no Firestore
+        listsData.sort((a, b) => a.order - b.order);
         setLists(listsData);
       },
       (error) => {
