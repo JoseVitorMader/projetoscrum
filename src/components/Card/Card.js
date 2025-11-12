@@ -8,11 +8,7 @@ function Card({ card, onEdit, onDelete, onClick }) {
     low: '#48bb78'
   };
 
-  const priorityLabels = {
-    high: '🔴',
-    medium: '🟠',
-    low: '🟢'
-  };
+  // priorityLabels removed (unused) — keep colors for the visual indicator
 
   return (
     <div className="card" onClick={onClick}>

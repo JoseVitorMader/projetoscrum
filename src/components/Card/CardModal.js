@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { doc, updateDoc, addDoc, collection, query, where, getDocs, orderBy, deleteDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../contexts/AuthContext';
@@ -15,11 +15,7 @@ function CardModal({ card, onClose, onUpdate }) {
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    loadComments();
-  }, [card.id]);
-
-  async function loadComments() {
+  const loadComments = useCallback(async () => {
     try {
       const commentsQuery = query(
         collection(db, 'comments'),
@@ -35,7 +31,11 @@ function CardModal({ card, onClose, onUpdate }) {
     } catch (error) {
       console.error('Erro ao carregar comentários:', error);
     }
-  }
+  }, [card.id]);
+
+  useEffect(() => {
+    loadComments();
+  }, [loadComments]);
 
   async function handleSave() {
     setLoading(true);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { collection, addDoc, query, where, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import './SprintManager.css';
@@ -14,12 +14,14 @@ function SprintManager({ team }) {
   });
   const [activeSprint, setActiveSprint] = useState(null);
 
-  useEffect(() => {
-    loadSprints();
-  }, [team]);
-
-  async function loadSprints() {
+  const loadSprints = useCallback(async () => {
     try {
+      if (!team || !team.id) {
+        setSprints([]);
+        setActiveSprint(null);
+        return;
+      }
+
       const sprintsQuery = query(
         collection(db, 'sprints'),
         where('teamId', '==', team.id)
@@ -37,7 +39,11 @@ function SprintManager({ team }) {
     } catch (error) {
       console.error('Erro ao carregar sprints:', error);
     }
-  }
+  }, [team]);
+
+  useEffect(() => {
+    loadSprints();
+  }, [loadSprints]);
 
   async function handleCreateSprint(e) {
     e.preventDefault();
