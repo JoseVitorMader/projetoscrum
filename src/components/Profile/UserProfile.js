@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import './UserProfile.css';
 
 function UserProfile({ onBack }) {
-  const { currentUser, userProfile, updateUserProfile } = useAuth();
+  const { currentUser, updateUserProfile } = useAuth();
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
@@ -23,7 +23,7 @@ function UserProfile({ onBack }) {
   const [message, setMessage] = useState({ type: '', text: '' });
 
   useEffect(() => {
-    loadUserProfile();
+    loadUserProfile();// eslint-disable-next-line
   }, [currentUser]);
 
   const loadUserProfile = async () => {

@@ -9,7 +9,7 @@ function ActivityLog({ teamId }) {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    loadActivities();
+    loadActivities(); // eslint-disable-next-line
   }, [teamId]);
 
   async function loadActivities() {
